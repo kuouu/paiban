@@ -1,34 +1,40 @@
-// This plugin will open a window to prompt the user to enter a number, and
-// it will then create that many rectangles on the screen.
-
-// This file holds the main code for plugins. Code in this file has access to
-// the *figma document* via the figma global object.
-// You can access browser APIs in the <script> tag inside "ui.html" which has a
-// full browser environment (See https://www.figma.com/plugin-docs/how-plugins-run).
-
-// This shows the HTML page in "ui.html".
 figma.showUI(__html__);
 
-// Calls to "parent.postMessage" from within the HTML page will trigger this
-// callback. The callback will be passed the "pluginMessage" property of the
-// posted message.
-figma.ui.onmessage = msg => {
-  // One way of distinguishing between different types of messages sent from
-  // your HTML page is to use an object with a "type" property like this.
-  if (msg.type === 'create-rectangles') {
-    const nodes: SceneNode[] = [];
-    for (let i = 0; i < msg.count; i++) {
-      const rect = figma.createRectangle();
-      rect.x = i * 150;
-      rect.fills = [{type: 'SOLID', color: {r: 1, g: 0.5, b: 0}}];
-      figma.currentPage.appendChild(rect);
-      nodes.push(rect);
-    }
-    figma.currentPage.selection = nodes;
-    figma.viewport.scrollAndZoomIntoView(nodes);
+figma.ui.onmessage = (msg) => {
+  if (msg.type === "test") {
+    const postSizes = [
+      { platform: "instagram", height: 1, width: 1 },
+      { platform: "tiktok", height: 16, width: 9 },
+      { platform: "xiaohongshu", height: 4, width: 3 },
+    ];
+    const selectedNodes = figma.currentPage.selection;
+    const newPage = figma.createPage();
+    newPage.name = "New Page";
+    selectedNodes.forEach((node) => {
+      for (let i = 0; i < postSizes.length; i++) {
+        const postSize = postSizes[i];
+        // create frame
+        const newFrame = figma.createFrame();
+        newFrame.name = `${postSize.platform}_${node.name}-${i}`;
+        const unit = node.width / postSize.width;
+        newFrame.resize(unit * postSize.width, unit * postSize.height);
+        newFrame.x = i * 2000;
+        newFrame.y = node.y;
+        newFrame.backgrounds = [
+          { type: "SOLID", color: { r: 255/255, g: 245/255, b: 232/255 } },
+        ];
+        // create node
+        const newNode = node.clone();
+        newNode.x = 0;
+        newNode.y = (newFrame.height - node.height) / 2;
+
+        newFrame.appendChild(newNode);
+        newPage.appendChild(newFrame);
+      }
+    });
+    figma.notify("New page created");
+    figma.currentPage = newPage;
   }
 
-  // Make sure to close the plugin when you're done. Otherwise the plugin will
-  // keep running, which shows the cancel button at the bottom of the screen.
   figma.closePlugin();
 };
