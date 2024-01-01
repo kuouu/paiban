@@ -1,6 +1,13 @@
 figma.showUI(__html__);
 
 figma.ui.onmessage = (msg) => {
+  if (msg.type === "debug") {
+    const selectedNodes = figma.currentPage.selection;
+    selectedNodes.forEach((node) => {
+      console.log(node);
+    });
+  }
+
   if (msg.type === "test") {
     const postSizes = [
       { platform: "instagram", height: 1, width: 1 },
@@ -27,8 +34,16 @@ figma.ui.onmessage = (msg) => {
         const newNode = node.clone();
         newNode.x = 0;
         newNode.y = (newFrame.height - node.height) / 2;
-
         newFrame.appendChild(newNode);
+        // logo
+        const logoNode = figma.getNodeById("2675:2952");
+        if (logoNode && logoNode.type === "RECTANGLE") {
+          const newLogoNode = logoNode.clone();
+          newLogoNode.x = 540 - logoNode.width / 2;
+          newLogoNode.y = postSize.height * unit - 150;
+          newFrame.appendChild(newLogoNode);
+        }
+
         newPage.appendChild(newFrame);
       }
     });

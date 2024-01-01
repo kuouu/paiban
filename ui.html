@@ -1,9 +1,14 @@
 <h2>Rectangle Creator</h2>
 <button id="test">Test</button>
+<button id="debug">Debug</button>
 <script>
 
 document.getElementById('test').onclick = () => {
   parent.postMessage({ pluginMessage: { type: 'test' } }, '*')
+}
+
+document.getElementById('debug').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'debug' } }, '*')
 }
 
 </script>
