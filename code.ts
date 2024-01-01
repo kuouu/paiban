@@ -9,20 +9,24 @@ figma.ui.onmessage = (msg) => {
   }
 
   if (msg.type === "test") {
-    const postSizes = [
-      { platform: "instagram", height: 1, width: 1 },
-      { platform: "tiktok", height: 16, width: 9 },
-      { platform: "xiaohongshu", height: 4, width: 3 },
+    const platforms = [
+      { name: "instagram", height: 1, width: 1 },
+      { name: "tiktok", height: 16, width: 9 },
+      { name: "xiaohongshu", height: 4, width: 3 },
+      { name: "vocus", height: 630, width: 1200, onlyCover: true },
+      { name: "woman.udn", height: 2, width: 3, onlyCover: true },
     ];
     const selectedNodes = figma.currentPage.selection;
     const newPage = figma.createPage();
     newPage.name = "New Page";
     selectedNodes.forEach((node) => {
-      for (let i = 0; i < postSizes.length; i++) {
-        const postSize = postSizes[i];
+      for (let i = 0; i < platforms.length; i++) {
+        const postSize = platforms[i];
+        if(!node.name.includes('cover') && postSize.onlyCover) 
+          continue;
         // create frame
         const newFrame = figma.createFrame();
-        newFrame.name = `${postSize.platform}_${node.name}-${i}`;
+        newFrame.name = `${postSize.name}_${node.name}-${i}`;
         const unit = node.width / postSize.width;
         newFrame.resize(unit * postSize.width, unit * postSize.height);
         newFrame.x = i * 2000;
