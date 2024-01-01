@@ -1,14 +1,19 @@
-<h2>Rectangle Creator</h2>
-<button id="test">Test</button>
-<button id="debug">Debug</button>
+<h5>注意事項：</h5>
+<ul>
+  <li>封面請在命名時包含 "cover"，不然插件不會輸出方格子跟女子漾的首圖</li>
+  <li>排列請由上至下，並且保留一定間距（tiktok 需要較大的高度），插件不會自動排版</li>
+  <li>不要放 logo</li>
+</ul>
+<button id="paiban">paiban!</button>
+<!-- <button id="debug">Debug</button> -->
 <script>
 
-document.getElementById('test').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'test' } }, '*')
+document.getElementById('paiban').onclick = () => {
+  parent.postMessage({ pluginMessage: { type: 'paiban' } }, '*')
 }
 
-document.getElementById('debug').onclick = () => {
-  parent.postMessage({ pluginMessage: { type: 'debug' } }, '*')
-}
+// document.getElementById('debug').onclick = () => {
+//   parent.postMessage({ pluginMessage: { type: 'debug' } }, '*')
+// }
 
 </script>

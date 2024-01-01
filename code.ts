@@ -8,7 +8,7 @@ figma.ui.onmessage = (msg) => {
     });
   }
 
-  if (msg.type === "test") {
+  if (msg.type === "paiban") {
     const platforms = [
       { name: "instagram", height: 1, width: 1 },
       { name: "tiktok", height: 16, width: 9 },
